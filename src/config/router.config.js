@@ -46,6 +46,22 @@ export const asyncRouterMap = [
         ]
       },
 
+      // system
+      {
+        path: '/system',
+        redirect: '/system/organization',
+        component: PageView,
+        meta: { title: '系统管理', icon: 'form', permission: ['form'] },
+        children: [
+          {
+            path: '/system/organization',
+            name: 'organization',
+            component: () => import('@/views/system/Organization'),
+            meta: { title: '组织管理', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+
       // forms
       {
         path: '/form',
