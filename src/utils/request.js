@@ -34,6 +34,13 @@ const err = (error) => {
         })
       }
     }
+    // Lcy添加统一处理异常提示内容，调用api时，如果使用catch捕获异常时，需要自己处理
+    if (error.response.status === 400 && data.status === 400) {
+      notification.error({
+        message: '被禁止的操作',
+        description: data.message
+      })
+    }
   }
   return Promise.reject(error)
 }

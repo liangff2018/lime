@@ -2,8 +2,7 @@ import { axios } from '@/utils/request'
 
 const api = {
   base: '/organization',
-  findByParentId: '/organization/findByParentId',
-  findOrgVoByParentId: '/organization/findOrgVoByParentId'
+  findByParentId: '/organization/findByParentId'
 }
 
 export default api
@@ -18,13 +17,6 @@ export function findOrgById (id) {
 export function findOrgByParentId (parentId) {
   return axios({
     url: `${api.findByParentId}/` + (parentId === undefined ? 0 : parentId),
-    method: 'get'
-  })
-}
-
-export function findOrgVoByParentId (parentId) {
-  return axios({
-    url: `${api.findOrgVoByParentId}/` + (parentId === undefined ? 0 : parentId),
     method: 'get'
   })
 }
