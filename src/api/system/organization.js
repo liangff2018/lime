@@ -2,7 +2,10 @@ import { axios } from '@/utils/request'
 
 const api = {
   base: '/organization',
-  findByParentId: '/organization/findByParentId'
+  findByParentId: '/organization/findByParentId',
+  disableOrgById: '/organization/disableOrgById',
+  enableOrgById: '/organization/enableOrgById',
+  deleteOrgById: '/organization/deleteOrgById'
 }
 
 export default api
@@ -34,5 +37,26 @@ export function updateOrg (organization) {
     url: api.base,
     method: 'put',
     data: organization
+  })
+}
+
+export function disableOrgById (id) {
+  return axios({
+    url: `${api.disableOrgById}/${id}`,
+    method: 'post'
+  })
+}
+
+export function enableOrgById (id) {
+  return axios({
+    url: `${api.enableOrgById}/${id}`,
+    method: 'post'
+  })
+}
+
+export function deleteOrgById (id) {
+  return axios({
+    url: `${api.deleteOrgById}/${id}`,
+    method: 'delete'
   })
 }

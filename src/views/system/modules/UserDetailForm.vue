@@ -1,8 +1,7 @@
 <template>
   <a-modal
-    title="新增组织"
-    :width="640"
     :visible="visible"
+    title="新增人员"
     @ok="okClick"
     @cancel="cancelClick"
   >
@@ -13,7 +12,7 @@
         :wrapperCol="wrapperCol"
       >
         <a-input
-          v-decorator="['parentName']"
+          v-decorator="['mainPosName']"
           disabled
         />
       </a-form-item>
@@ -22,55 +21,39 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input
-          autocomplete="off"
-          v-decorator="['code', {rules: [{required: true, min: 2, message: '请输入至少2个字!'}]}]"
-        />
+        <a-input autocomplete="off" v-decorator="['username', {rules: [{required: true, min: 4, message: '请输入4到16个字符.'}]}]" />
       </a-form-item>
       <a-form-item
         label="名称"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input
-          autocomplete="off"
-          v-decorator="['name', {rules: [{required: true, min: 2, message: '请输入至少2个字!'}]}]"
-        />
+        <a-input autocomplete="off" v-decorator="['name', {rules: [{required: true, min: 2, message: '请输入2到8个字符.'}]}]" />
       </a-form-item>
       <a-form-item
-        label="长名称"
+        label="手机号码"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input
-          autocomplete="off"
-          v-decorator="['longName']"
-        />
+        <a-input autocomplete="off" v-decorator="['phone', {rules: [{required: true}]}]" />
       </a-form-item>
       <a-form-item
-        label="组织类型"
+        label="邮箱"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-select
-          :disabled="true"
-          v-decorator="['orgKindId', {rules: [{required: true, message: '组织类型不允许为空!'}]}]"
-        >
-          <a-select-option value="1">机构</a-select-option>
-          <a-select-option value="2">部门</a-select-option>
-          <a-select-option value="3">岗位</a-select-option>
-        </a-select>
+        <a-input autocomplete="off" v-decorator="['email']" />
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 
 <script>
-import { addOrg, findOrgById, updateOrg } from '@/api/system/organization'
+import { findUserById, addUserToOrg, updateUserAndOrg } from '@/api/system/user'
 export default {
   data () {
     return {
-      name: '组织机构详细信息',
+      name: '人员明细',
       visible: false,
       labelCol: {
         xs: { span: 24 },
@@ -82,29 +65,28 @@ export default {
       },
       operateType: 'view',
       form: this.$form.createForm(this),
-      org: {}
+      user: {}
     }
   },
   methods: {
     open (param) {
-      this.org = {}
+      this.user = { password: '123456' }
       this.operateType = param.operateType
       this.visible = true
       this.form.resetFields()
       if (this.operateType === 'new') {
-        this.form.getFieldDecorator('orgKindId', { initialValue: param.orgKindId })
-        this.form.getFieldDecorator('parentName', { initialValue: param.parentName })
-        this.org.orgKindId = param.orgKindId
-        this.org.parentId = param.parentId
+        this.form.getFieldDecorator('mainPosName', { initialValue: param.mainPosName })
+        this.user.mainPosId = param.mainPosId
       } else {
-        findOrgById(param.id).then(res => {
-          this.org = res
+        findUserById(param.id).then(res => {
+          debugger
+          this.user = res
           this.form.setFieldsValue({
-            parentName: res.parentName,
-            code: res.code,
+            mainPosName: res.mainPosName,
+            username: res.username,
             name: res.name,
-            longName: res.longName,
-            orgKindId: res.orgKindId + ''
+            phone: res.phone,
+            email: res.email
           })
         })
         if (this.operateType !== 'edit') {
@@ -115,14 +97,15 @@ export default {
     okClick () {
       const { form: { validateFields } } = this
       validateFields((errors, values) => {
+        debugger
         if (!errors) {
           if (this.operateType === 'new') {
-            addOrg(Object.assign(this.org, values)).then(res => {
+            addUserToOrg(Object.assign(this.user, values)).then(res => {
               this.visible = false
               this.$emit('ok', '插入成功', values)
             })
           } else if (this.operateType === 'edit') {
-            updateOrg(Object.assign(this.org, values)).then(res => {
+            updateUserAndOrg(Object.assign(this.user, values, { password: '123456', createTime: undefined })).then(res => {
               this.visible = false
               this.$emit('ok', '更新成功', values)
             })

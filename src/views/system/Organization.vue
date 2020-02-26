@@ -1,30 +1,34 @@
 <template>
   <div class="root-class-lcy">
     <a-card>
-      <a-button @click="addRootOrgClick">新建根机构</a-button>
+      <a-button
+        type="primary"
+        @click="addRootOrgClick"
+      >新建根机构</a-button>
       <a-tree
         ref="tree"
         :loadData="loadOrgData"
         :treeData="orgData"
         :replaceFields="replaceFields"
         @select="onTerrSelect"
+        :loadedKeys="loadedKeys"
         showIcon
       >
         <a-icon
           type="home"
-          slot="ogn"
+          slot="orgType1"
         />
         <a-icon
           type="star"
-          slot="dpt"
+          slot="orgType2"
         />
         <a-icon
           type="team"
-          slot="pos"
+          slot="orgType3"
         />
         <a-icon
           type="user"
-          slot="psm"
+          slot="orgType4"
         />
         <template
           slot="custom"
@@ -32,7 +36,8 @@
         >
           <span>{{ item.name }}</span>
           <a-button-group style="float: right;">
-            <a-dropdown :trigger="['click']">
+
+            <a-dropdown :trigger="['click']" v-if="item.validateState === 1">
               <a
                 class="ant-dropdown-link"
                 href="#"
@@ -40,22 +45,34 @@
                 <a-icon type="plus" /> 新建</a>
               <a-menu
                 slot="overlay"
-                @click="orgMenuClick"
+                @click="(e) => orgMenuClick(e, item)"
               >
-                <a-menu-item key="0">
+                <a-menu-item
+                  key="1"
+                  :disabled="item.orgKindId > 1"
+                >
                   <a-icon type="user" />新建机构
                 </a-menu-item>
-                <a-menu-item key="1">
+                <a-menu-item
+                  key="2"
+                  :disabled="item.orgKindId > 2"
+                >
                   <a-icon type="user" />新建部门
                 </a-menu-item>
-                <a-menu-item key="2">
+                <a-menu-item
+                  key="3"
+                  :disabled="item.orgKindId >= 3"
+                >
                   <a-icon type="user" />新建岗位
                 </a-menu-item>
-                <a-menu-item key="3">
+                <a-menu-item
+                  key="4"
+                  :disabled="item.orgKindId >= 4"
+                >
                   <a-icon type="user" />新建人员
                 </a-menu-item>
                 <a-menu-divider />
-                <a-menu-item key="4">
+                <a-menu-item key="5">
                   <a-icon type="user" />分配人员</a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -65,22 +82,36 @@
               icon="edit"
               @click="editOrgClick(item)"
             >编辑</a-button>
-            <a-button
-              type="link"
-              size="small"
-              icon="stop"
-            >禁用</a-button>
-            <a-button
-              type="link"
-              size="small"
-              icon="delete"
-            >删除</a-button>
+            <a-popconfirm
+              :title="'确认要'+ (item.validateState === 1 ? '禁用当前及所有下级组织': '启用当前级所有上级组织') + '吗？'"
+              @confirm="changOrgStateClick(item.id, item.validateState)"
+            >
+              <a-button
+                type="link"
+                size="small"
+                icon="stop"
+              >{{ item.validateState === 1 ? '禁用' : '启用' }}</a-button>
+            </a-popconfirm>
+            <a-popconfirm
+              title="确认要删除吗？"
+              @confirm="deleteOrgClick(item.id)"
+            >
+              <a-button
+                type="link"
+                size="small"
+                icon="delete"
+              >删除</a-button>
+            </a-popconfirm>
           </a-button-group>
         </template>
       </a-tree>
       <org-detail-form
         ref="orgDetailForm"
-        @ok="handleOk"
+        @ok="handleOkOrg"
+      />
+      <user-detail-form
+        ref="userDetailForm"
+        @ok="handleOKUser"
       />
     </a-card>
   </div>
@@ -88,20 +119,23 @@
 
 <script>
 import OrgDetailForm from './modules/OrgDetailForm'
-import { findOrgByParentId } from '@/api/system/organization'
+import UserDetailForm from './modules/UserDetailForm'
+import { findOrgByParentId, enableOrgById, disableOrgById, deleteOrgById } from '@/api/system/organization'
 
-const slotObj = { slots: { icon: 'ogn' }, scopedSlots: { title: 'custom' } }
+const slotCustom = { scopedSlots: { title: 'custom' } }
 
 export default {
   components: {
-    OrgDetailForm
+    OrgDetailForm,
+    UserDetailForm
   },
   data () {
     return {
       name: '组织管理',
       replaceFields: { title: 'name', key: 'id' },
       orgData: [],
-      selectedNode: undefined
+      selectedNode: undefined,
+      loadedKeys: []
     }
   },
   created () {
@@ -110,50 +144,103 @@ export default {
   methods: {
     loadRootOrgData () {
       findOrgByParentId().then(res => {
-        this.orgData = res.map(item => Object.assign(item, slotObj))
+        this.orgData = res.map(item => Object.assign(item, slotCustom, { slots: { icon: 'orgType' + item.orgKindId } }))
       })
     },
     loadOrgData (treeNode) {
+      this.loadedKeys.push(treeNode.dataRef.id)
       return new Promise(resolve => {
         if (treeNode.dataRef.children) {
           resolve()
           return
         }
         findOrgByParentId(treeNode.eventKey).then(res => {
-          treeNode.dataRef.children = res.map(item => Object.assign(item, slotObj))
+          treeNode.dataRef.children = res.map(item => Object.assign(item, slotCustom, { slots: { icon: 'orgType' + item.orgKindId } }))
           this.orgData = [...this.orgData]
           resolve()
         })
       })
     },
     addRootOrgClick (event) {
+      debugger
       this.$refs.orgDetailForm.open({
         operateType: 'new',
         orgKindId: '1',
         parentId: null
       })
     },
-    handleOk (msg, values) {
+    handleOkOrg (msg, values) {
+      this.reloadCurrentOrgData()
+      this.$message.info(msg)
+    },
+    reloadCurrentOrgData () {
       const parentNode = this.selectedNode.$parent
       if (parentNode.dataRef) {
         parentNode.dataRef.children = null
         this.loadOrgData(parentNode)
       } else {
+        this.selectedNode.children = undefined
         this.loadRootOrgData()
       }
-      this.$message.info(msg)
+      this.loadedKeys = []
     },
     editOrgClick (item) {
-      this.$refs.orgDetailForm.open({
-        operateType: 'edit',
-        id: item.id
+      if (item.orgKindId === 4) {
+        this.$refs.userDetailForm.open({
+          operateType: 'edit',
+          id: item.personId
+        })
+      } else {
+        this.$refs.orgDetailForm.open({
+          operateType: 'edit',
+          id: item.id
+        })
+      }
+    },
+    changOrgStateClick (id, oldState) {
+      if (oldState === 1) {
+        disableOrgById(id).then(() => {
+          this.reloadCurrentOrgData()
+        })
+      } else if (oldState === 0) {
+        while (this.selectedNode.$parent.treeData === undefined) {
+          this.selectedNode = this.selectedNode.$parent
+        }
+        enableOrgById(id).then(() => {
+          this.reloadCurrentOrgData()
+        })
+      }
+    },
+    deleteOrgClick (id) {
+      deleteOrgById(id).then(() => {
+        this.reloadCurrentOrgData()
       })
     },
-    orgMenuClick (event) {
-      this.$message.info(event.key)
+    orgMenuClick (event, item) {
+      if (event.key === '4') {
+        this.$refs.userDetailForm.open({
+          operateType: 'new',
+          mainPosId: item.id,
+          mainPosName: item.name
+        })
+      } else if (event.key === '5') {
+
+      } else {
+        this.$refs.orgDetailForm.open({
+          operateType: 'new',
+          orgKindId: event.key,
+          parentId: item.id,
+          parentName: item.name
+        })
+      }
     },
     onTerrSelect (key, e) {
       this.selectedNode = e.node
+    },
+
+    handleOKUser (msg) {
+      this.reloadCurrentOrgData()
+      this.$message.info(msg)
     }
   }
 }
