@@ -224,7 +224,7 @@ export default {
           mainPosName: item.name
         })
       } else if (event.key === '5') {
-
+        this.$message.info('正在建设中...')
       } else {
         this.$refs.orgDetailForm.open({
           operateType: 'new',

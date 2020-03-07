@@ -116,6 +116,7 @@ export default {
   },
   created () {
     getOrgTree().then(res => {
+      console.log('tree-res', res)
       this.orgTree = res.result
     })
   },

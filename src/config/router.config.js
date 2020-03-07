@@ -54,10 +54,22 @@ export const asyncRouterMap = [
         meta: { title: '系统管理', icon: 'form', permission: ['form'] },
         children: [
           {
+            path: '/system/test',
+            name: 'test',
+            component: () => import('@/views/system/Test'),
+            meta: { title: '测试', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
             path: '/system/organization',
             name: 'organization',
             component: () => import('@/views/system/Organization'),
             meta: { title: '组织管理', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/system/resource',
+            name: 'resource',
+            component: () => import('@/views/system/Resource'),
+            meta: { title: '资源管理', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },

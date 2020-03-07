@@ -1,0 +1,80 @@
+<template>
+  <a-card>
+    <a-button
+      type="primary"
+      @click="addMenuClick"
+    >新建菜单</a-button>
+    <s-table
+      ref="table"
+      :columns="columns"
+      :data="loadData"
+      :rowKey="row => row.id"
+      @expand="onExpand"
+      @change="handleChange"
+    >
+      <span
+        slot="action"
+        slot-scope="text, row"
+      >
+        <a href="javascript:;">新增</a>
+        <a-divider type="vertical" />
+        <a href="javascript:;">删除 {{ row.id }}</a>
+      </span>
+    </s-table>
+    <menu-detail-form
+      ref="menuDetailForm"
+      @ok="handleOkMenu"
+    />
+  </a-card>
+
+</template>
+
+<script>
+import { STable } from '@/components'
+import MenuDetailForm from './modules/MenuDetailForm'
+import { findPage } from '@/api/system/resource'
+const columns = [
+  { title: '名称', dataIndex: 'name', sorter: true, width: '20%' },
+  { title: '编码', dataIndex: 'code', sorter: true, width: '20%' },
+  { title: '描述', dataIndex: 'codescriptionde', width: '20%' },
+  { title: '可见', dataIndex: 'enVisible', width: '10%' },
+  { title: '操作', key: 'action', scopedSlots: { customRender: 'action' } }
+]
+export default {
+  components: {
+    STable,
+    MenuDetailForm
+  },
+  mounted () {
+    // this.loadData()
+  },
+  data () {
+    return {
+      name: '资源权限',
+      columns,
+      data: [],
+      loadData: param => {
+        return findPage(param).then(res => {
+          // debugger
+          const data = res.data.map(item => { return Object.assign({ children: [] }, item) })
+          res.data = data
+          return res
+        })
+      }
+    }
+  },
+  methods: {
+    addMenuClick () {
+      this.$refs.menuDetailForm.open()
+    },
+    onExpand (e, row) {
+      console.log('param', e, row)
+    },
+    handleChange (pagination, filters, sorter) {
+      console.log('Various parameters', pagination, filters, sorter)
+    },
+    handleOkMenu () { }
+
+  }
+}
+</script>
