@@ -7,6 +7,16 @@
   >
     <a-form :form="form">
       <a-form-item
+        label="名称"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['name', {rules: [{required: true, message: '[名称]不允许为空.'}]}]"
+        />
+      </a-form-item>
+      <a-form-item
         label="编码"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
@@ -17,13 +27,53 @@
         />
       </a-form-item>
       <a-form-item
-        label="名称"
+        label="分类"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-input
           autocomplete="off"
-          v-decorator="['name', {rules: [{required: true, message: '[名称]不允许为空.'}]}]"
+          v-decorator="['catalog']"
+        />
+      </a-form-item>
+      <a-form-item
+        label="角色类型Id"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['roleKindId']"
+        />
+      </a-form-item>
+      <a-form-item
+        label="描述"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['description']"
+        />
+      </a-form-item>
+      <a-form-item
+        label="序号"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['sequence', {rules: [{required: true, message: '[序号]不允许为空.'}]}]"
+        />
+      </a-form-item>
+      <a-form-item
+        label="可用状态"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['validState', {rules: [{required: true, message: '[可用状态]不允许为空.'}]}]"
         />
       </a-form-item>
     </a-form>
