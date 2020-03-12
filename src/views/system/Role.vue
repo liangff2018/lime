@@ -1,5 +1,5 @@
 <template>
-  <a-card>
+  <a-card style="min-height: 580px">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="lyConf.gutter">
@@ -75,7 +75,7 @@
               >查询</a-button>
               <a-button
                 style="margin-left: 8px"
-                @click="() => queryParam = {}"
+                @click="resetQuery"
               >重置</a-button>
               <a
                 @click="() => advanced = !advanced"
@@ -123,7 +123,12 @@
                 <a href="javascript:;">分配</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="deleteClick(row.id)">删除</a>
+                <a-popconfirm
+                  :title="'确认要删除吗？'"
+                  @confirm="deleteClick(row.id)"
+                >
+                  <a href="javascript:;">删除</a>
+                </a-popconfirm>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -208,6 +213,10 @@ export default {
       deleteById(id).then(res => {
         this.$refs.table.refresh()
       })
+    },
+    resetQuery () {
+      this.queryParam = {}
+      this.$refs.table.refresh()
     },
     handleOk () {
       this.$refs.table.refresh()

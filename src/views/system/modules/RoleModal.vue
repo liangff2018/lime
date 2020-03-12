@@ -1,5 +1,6 @@
 <template>
   <a-modal
+    :width="640"
     :visible="visible"
     :title="titleName"
     @ok="okClick"
@@ -107,6 +108,7 @@ export default {
       this.visible = true
       if (this.operateType === 'new') {
         this.titleName = '新建角色'
+        this.data = {}
       } else if (this.operateType === 'edit') {
         this.titleName = '编辑角色'
         findById(param.id).then(res => {
