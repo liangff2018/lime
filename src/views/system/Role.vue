@@ -1,142 +1,75 @@
 <template>
-  <a-card class="lcy-ext" style="min-height: 580px">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="lyConf.gutter">
-          <a-col
-            :md="lyConf.md"
-            :sm="lyConf.sm"
+  <a-card
+    class="lcy-ext"
+    style="min-height: 580px"
+  >
+    <a-row gutter="8">
+      <a-col
+        :span="10"
+        class="col-right-line-vertical"
+      >
+        <a-button
+          type="primary"
+          @click="addClick"
+        >新增</a-button>
+        <a-input-search
+          placeholder="输入过滤条件"
+          style="width: 280px; float: right"
+          @search="onSearchRole"
+        />
+        <s-table
+          ref="table"
+          :columns="columns"
+          :data="loadData"
+          :rowKey="(row) => row.id"
+          :customRow="rowClick"
+          :rowClassName="setRowClassName"
+        >
+          <span
+            slot="serial"
+            slot-scope="text, row, index"
           >
-            <a-form-item label="名称">
-              <a-input v-model="queryParam.name" />
-            </a-form-item>
-          </a-col>
-          <a-col
-            :md="lyConf.md"
-            :sm="lyConf.sm"
+            {{ index + 1 }}
+          </span>
+          <span
+            slot="action"
+            slot-scope="text, row"
           >
-            <a-form-item label="编码">
-              <a-input v-model="queryParam.code" />
-            </a-form-item>
-          </a-col>
-          <template v-if="advanced">
-            <a-col
-              :md="lyConf.md"
-              :sm="lyConf.sm"
-            >
-              <a-form-item label="分类">
-                <a-input v-model="queryParam.catalog" />
-              </a-form-item>
-            </a-col>
-            <a-col
-              :md="lyConf.md"
-              :sm="lyConf.sm"
-            >
-              <a-form-item label="角色类型Id">
-                <a-input v-model="queryParam.roleKindId" />
-              </a-form-item>
-            </a-col>
-            <a-col
-              :md="lyConf.md"
-              :sm="lyConf.sm"
-            >
-              <a-form-item label="描述">
-                <a-input v-model="queryParam.description" />
-              </a-form-item>
-            </a-col>
-            <a-col
-              :md="lyConf.md"
-              :sm="lyConf.sm"
-            >
-              <a-form-item label="序号">
-                <a-input v-model="queryParam.sequence" />
-              </a-form-item>
-            </a-col>
-            <a-col
-              :md="lyConf.md"
-              :sm="lyConf.sm"
-            >
-              <a-form-item label="可用状态">
-                <a-input v-model="queryParam.validState" />
-              </a-form-item>
-            </a-col>
-          </template>
-          <a-col
-            :md="!advanced && lyConf.md || 24"
-            :sm="lyConf.sm"
-          >
-            <span
-              class="table-page-search-submitButtons"
-              :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
-            >
-              <a-button
-                type="primary"
-                @click="$refs.table.refresh(true)"
-              >查询</a-button>
-              <a-button
-                style="margin-left: 8px"
-                @click="resetQuery"
-              >重置</a-button>
-              <a
-                @click="() => advanced = !advanced"
-                style="margin-left: 8px"
-              >
-                {{ advanced ? '收起' : '展开' }}
-                <a-icon :type="advanced ? 'up' : 'down'" />
-              </a>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+            <template>
+              <a @click="editClick(row.id)">编辑</a>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a class="ant-dropdown-link">
+                  更多
+                  <a-icon type="down" />
+                </a>
+                <a-menu slot="overlay">
+                  <a-menu-item>
+                    <a href="javascript:;">分配</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-popconfirm
+                      :title="'确认要删除吗？'"
+                      @confirm="deleteClick(row.id)"
+                    >
+                      <a href="javascript:;">删除</a>
+                    </a-popconfirm>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
+            </template>
+          </span>
+        </s-table>
+      </a-col>
+      <a-col :span="14">
+        <a-input-search
+          placeholder="输入过滤条件"
+          style="width: 280px; float: right"
+          @search="onSearchPermission"
+        />
+      </a-col>
+    </a-row>
 
-    <a-button
-      type="primary"
-      @click="addClick"
-    >新增</a-button>
-    <s-table
-      ref="table"
-      :columns="columns"
-      :data="loadData"
-      :rowKey="(row) => row.id"
-      :customRow="rowClick"
-      :rowClassName="setRowClassName"
-    >
-      <span
-        slot="serial"
-        slot-scope="text, row, index"
-      >
-        {{ index + 1 }}
-      </span>
-      <span
-        slot="action"
-        slot-scope="text, row"
-      >
-        <template>
-          <a @click="editClick(row.id)">编辑</a>
-          <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">
-              更多
-              <a-icon type="down" />
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;">分配</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm
-                  :title="'确认要删除吗？'"
-                  @confirm="deleteClick(row.id)"
-                >
-                  <a href="javascript:;">删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        </template>
-      </span>
-    </s-table>
     <role-modal
       ref="roleModal"
       @ok="handleOk"
@@ -155,11 +88,6 @@ const columns = [
   { title: '#', width: '80px', scopedSlots: { customRender: 'serial' } },
   { title: '名称', dataIndex: 'name' },
   { title: '编码', dataIndex: 'code' },
-  { title: '分类', dataIndex: 'catalog' },
-  { title: '角色类型Id', dataIndex: 'roleKindId' },
-  { title: '描述', dataIndex: 'description' },
-  { title: '序号', dataIndex: 'sequence' },
-  { title: '可用状态', dataIndex: 'validState' },
   { title: '操作', width: '150px', scopedSlots: { customRender: 'action' } }
 ]
 
@@ -196,7 +124,7 @@ export default {
       columns,
       loadData: param => {
         const queryParam = buildParamLike(this.queryParam, opts.operators, 'all')
-        param = Object.assign(param, queryParam, opts, { order: order })
+        param = Object.assign(param, queryParam, opts, { order: order, isAnd: false })
         return findPage(param).then(res => {
           this.selectedRow = res && res.data && res.data[0]
           return res
@@ -235,7 +163,15 @@ export default {
     },
     setRowClassName (row, index) {
       return row.id === this.selectedRow.id ? 'table-row-selected-color' : ''
+    },
+    onSearchRole (value) {
+      this.queryParam = Object.assign(this.queryParam, { name: value, code: value })
+      this.$refs.table.refresh()
+    },
+    onSearchPermission (value) {
+      this.$message.info(value)
     }
+
   }
 }
 </script>
