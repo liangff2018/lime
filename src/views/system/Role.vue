@@ -1,5 +1,5 @@
 <template>
-  <a-card style="min-height: 580px">
+  <a-card class="lcy-ext" style="min-height: 580px">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="lyConf.gutter">
@@ -99,6 +99,8 @@
       :columns="columns"
       :data="loadData"
       :rowKey="(row) => row.id"
+      :customRow="rowClick"
+      :rowClassName="setRowClassName"
     >
       <span
         slot="serial"
@@ -192,14 +194,15 @@ export default {
       // 显示高级查询
       advanced: false,
       columns,
-      role: { name: '%管理员%' },
       loadData: param => {
         const queryParam = buildParamLike(this.queryParam, opts.operators, 'all')
         param = Object.assign(param, queryParam, opts, { order: order })
         return findPage(param).then(res => {
+          this.selectedRow = res && res.data && res.data[0]
           return res
         })
-      }
+      },
+      selectedRow: {}
     }
   },
   methods: {
@@ -220,6 +223,18 @@ export default {
     },
     handleOk () {
       this.$refs.table.refresh()
+    },
+    rowClick (row, index) {
+      return {
+        on: {
+          click: () => {
+            this.selectedRow = row
+          }
+        }
+      }
+    },
+    setRowClassName (row, index) {
+      return row.id === this.selectedRow.id ? 'table-row-selected-color' : ''
     }
   }
 }

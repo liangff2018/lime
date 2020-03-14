@@ -17,6 +17,7 @@ import './core/lazy_use'
 import './permission' // permission control
 import './utils/filter' // global filter
 import './components/global.less'
+import './components/lime_ext.less' // Lcy添加全局的样子文件
 
 Vue.config.productionTip = false
 
