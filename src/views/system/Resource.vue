@@ -5,6 +5,7 @@
       @click="addResourceClick(0)"
     >新建菜单</a-button>
     <a-table
+      ref="table"
       :columns="columns"
       :dataSource="data"
       :pagination="pagination"
@@ -89,12 +90,14 @@ export default {
       })
     },
     addResourceClick (parentId) {
+      debugger
       this.$refs.resourceModal.open({ operateType: 'new', parentId: parentId })
     },
     editResourceClick (id) {
       this.$refs.resourceModal.open({ operateType: 'edit', id: id })
     },
     expand (isExpand, row) {
+      debugger
       if (isExpand && row.children && row.children.length === 0) {
         this.loadChildrenData(row.id)
       }

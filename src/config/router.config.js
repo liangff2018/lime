@@ -72,6 +72,12 @@ export const asyncRouterMap = [
             meta: { title: '资源管理', keepAlive: true, permission: [ 'dashboard' ] }
           },
           {
+            path: '/system/permission',
+            name: 'permission',
+            component: () => import('@/views/system/Permission'),
+            meta: { title: '权限管理', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
             path: '/system/role',
             name: 'role',
             component: () => import('@/views/system/Role'),

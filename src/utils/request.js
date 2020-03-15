@@ -40,6 +40,11 @@ const err = (error) => {
         message: '被禁止的操作',
         description: data.message
       })
+    } else if (error.response.status === 500 && data.status === 500) {
+      notification.error({
+        message: '被禁止的操作',
+        description: '服务器异常, 请稍候再试.'
+      })
     }
   }
   return Promise.reject(error)

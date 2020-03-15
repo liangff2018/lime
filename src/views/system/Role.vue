@@ -11,7 +11,7 @@
         <a-button
           type="primary"
           @click="addClick"
-        >新增</a-button>
+        >新建</a-button>
         <a-input-search
           placeholder="输入过滤条件"
           style="width: 280px; float: right"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { optEnum, buildParamLike } from '@/utils/optUtils'
+import { optEnum, buildFindPageParam } from '@/utils/optUtils'
 import STable from '@/components/Table'
 import { findPage, deleteById } from '@/api/system/role'
 import RoleModal from './modules/RoleModal'
@@ -123,7 +123,7 @@ export default {
       advanced: false,
       columns,
       loadData: param => {
-        const queryParam = buildParamLike(this.queryParam, opts.operators, 'all')
+        const queryParam = buildFindPageParam(this.queryParam, opts.operators, 'all')
         param = Object.assign(param, queryParam, opts, { order: order, isAnd: false })
         return findPage(param).then(res => {
           this.selectedRow = res && res.data && res.data[0]
