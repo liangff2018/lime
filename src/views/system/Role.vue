@@ -3,7 +3,7 @@
     class="lcy-ext"
     style="min-height: 580px"
   >
-    <a-row gutter="8">
+    <a-row :gutter="24">
       <a-col
         :span="10"
         class="col-right-line-vertical"
@@ -39,40 +39,61 @@
               <a @click="editClick(row.id)">编辑</a>
               <a-divider type="vertical" />
               <a-dropdown>
-                <a class="ant-dropdown-link">
-                  更多
-                  <a-icon type="down" />
-                </a>
-                <a-menu slot="overlay">
-                  <a-menu-item>
-                    <a href="javascript:;">分配</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-popconfirm
-                      :title="'确认要删除吗？'"
-                      @confirm="deleteClick(row.id)"
-                    >
-                      <a href="javascript:;">删除</a>
-                    </a-popconfirm>
-                  </a-menu-item>
-                </a-menu>
+                <a-popconfirm
+                  :title="'确认要删除吗？'"
+                  @confirm="deleteClick(row.id)"
+                >
+                  <a href="javascript:;">删除</a>
+                </a-popconfirm>
               </a-dropdown>
             </template>
           </span>
         </s-table>
       </a-col>
       <a-col :span="14">
+        <a-button @click="assignClick">分配权限</a-button>
         <a-input-search
           placeholder="输入过滤条件"
           style="width: 280px; float: right"
           @search="onSearchPermission"
         />
+        <s-table
+          ref="tablePms"
+          :rowKey="(row) => row.id"
+          :data="loadDataPms"
+          :columns="columnsPms"
+        >
+          <span
+            slot="serial"
+            slot-scope="text, row, index"
+          >
+            {{ index + 1 }}
+          </span>
+          <span
+            slot="action"
+            slot-scope="text, row"
+          >
+            <template>
+              <a-popconfirm
+                :title="'确认要删除吗？'"
+                @confirm="deleteClickPms(row)"
+              >
+                <a href="javascript:;">删除</a>
+              </a-popconfirm>
+
+            </template>
+          </span>
+        </s-table>
       </a-col>
     </a-row>
 
     <role-modal
       ref="roleModal"
       @ok="handleOk"
+    />
+    <permission-list-modal
+      ref="permissionListModal"
+      @ok="handleAssignOk"
     />
   </a-card>
 </template>
@@ -81,7 +102,20 @@
 import { optEnum, buildFindPageParam } from '@/utils/optUtils'
 import STable from '@/components/Table'
 import { findPage, deleteById } from '@/api/system/role'
+import { findPage as findPagePmsByRoleId, deleteById as deleteByIdPms } from '@/api/system/rolePermission'
 import RoleModal from './modules/RoleModal'
+import PermissionListModal from './modules/PermissionListModal'
+
+const columnsPms = [
+  { title: '#', width: '40px', scopedSlots: { customRender: 'serial' } },
+  { title: '全路径名称', dataIndex: 'fullName' },
+  { title: '编码', dataIndex: 'code' },
+  { title: 'url', dataIndex: 'url' },
+  { title: '描述', dataIndex: 'description' },
+  { title: '请求方式', dataIndex: 'apiMethod' },
+  { title: '可用状态', dataIndex: 'validState' },
+  { title: '操作', width: '70px', scopedSlots: { customRender: 'action' } }
+]
 
 // 列名
 const columns = [
@@ -104,13 +138,30 @@ const opts = {
   }
 }
 
+const optsPms = {
+  operators: {
+    parentId: optEnum.equalsTo,
+    code: optEnum.like,
+    name: optEnum.like,
+    url: optEnum.like,
+    description: optEnum.like,
+    sequence: optEnum.equalsTo,
+    apiMethod: optEnum.in,
+    validState: optEnum.equalsTo
+  }
+}
+
 // 排序；字符串类型，格式如name:acs, sequence: desc
 const order = ''
+
+// 由于findPage方法已重写，排序需要使用以下格式
+const orderPms = 'b.code asc'
 
 export default {
   components: {
     STable,
-    RoleModal
+    RoleModal,
+    PermissionListModal
   },
   data () {
     return {
@@ -119,14 +170,27 @@ export default {
       lyConf: { gutter: 48, md: 8, sm: 24 },
       // 查询参数
       queryParam: {},
+      queryParamPms: {},
       // 显示高级查询
       advanced: false,
       columns,
+      columnsPms,
       loadData: param => {
         const queryParam = buildFindPageParam(this.queryParam, opts.operators, 'all')
         param = Object.assign(param, queryParam, opts, { order: order, isAnd: false })
         return findPage(param).then(res => {
           this.selectedRow = res && res.data && res.data[0]
+          this.$refs.tablePms.refresh()
+          return res
+        })
+      },
+      loadDataPms: param => {
+        const roleId = this.selectedRow.id ? this.selectedRow.id : 0
+        this.queryParam = Object.assign(this.queryParamPms, { roleId: roleId })
+        const queryParam = buildFindPageParam(this.queryParamPms, optsPms.operators, 'all')
+        param = Object.assign(param, queryParam, optsPms, { order: orderPms, isAnd: true })
+        return findPagePmsByRoleId(param).then(res => {
+          // res.data = res.data.map(item => Object.assign({ children: [] }, item))
           return res
         })
       },
@@ -156,7 +220,10 @@ export default {
       return {
         on: {
           click: () => {
-            this.selectedRow = row
+            if (this.selectedRow.id !== row.id) {
+              this.selectedRow = row
+              this.$refs.tablePms.refresh()
+            }
           }
         }
       }
@@ -169,9 +236,18 @@ export default {
       this.$refs.table.refresh()
     },
     onSearchPermission (value) {
-      this.$message.info(value)
+      this.queryParamPms = Object.assign(this.queryParamPms, { name: value, code: value })
+      this.$refs.tablePms.refresh()
+    },
+    assignClick () {
+      this.$refs.permissionListModal.open({ roleId: this.selectedRow.id })
+    },
+    handleAssignOk () {
+      this.$refs.tablePms.refresh()
+    },
+    deleteClickPms (row) {
+      deleteByIdPms(row.roleId, row.permissionId).then(res => this.$refs.tablePms.refresh())
     }
-
   }
 }
 </script>
