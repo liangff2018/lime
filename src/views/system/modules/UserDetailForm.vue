@@ -1,6 +1,7 @@
 <template>
   <a-modal
     :visible="visible"
+    width="640px"
     title="新增人员"
     @ok="okClick"
     @cancel="cancelClick"
@@ -17,18 +18,18 @@
         />
       </a-form-item>
       <a-form-item
-        label="编号"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-      >
-        <a-input autocomplete="off" v-decorator="['username', {rules: [{required: true, min: 4, message: '请输入4到16个字符.'}]}]" />
-      </a-form-item>
-      <a-form-item
         label="名称"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-input autocomplete="off" v-decorator="['name', {rules: [{required: true, min: 2, message: '请输入2到8个字符.'}]}]" />
+      </a-form-item>
+      <a-form-item
+        label="编号"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input autocomplete="off" v-decorator="['username', {rules: [{required: true, min: 2, message: '请输入2到16个字符.'}]}]" />
       </a-form-item>
       <a-form-item
         label="手机号码"

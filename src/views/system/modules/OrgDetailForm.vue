@@ -18,16 +18,6 @@
         />
       </a-form-item>
       <a-form-item
-        label="编号"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-      >
-        <a-input
-          autocomplete="off"
-          v-decorator="['code', {rules: [{required: true, min: 2, message: '请输入至少2个字!'}]}]"
-        />
-      </a-form-item>
-      <a-form-item
         label="名称"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
@@ -35,6 +25,16 @@
         <a-input
           autocomplete="off"
           v-decorator="['name', {rules: [{required: true, min: 2, message: '请输入至少2个字!'}]}]"
+        />
+      </a-form-item>
+      <a-form-item
+        label="编号"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          autocomplete="off"
+          v-decorator="['code', {rules: [{required: true, min: 2, message: '请输入至少2个字!'}]}]"
         />
       </a-form-item>
       <a-form-item

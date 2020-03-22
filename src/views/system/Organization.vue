@@ -162,7 +162,7 @@ export default {
       })
     },
     addRootOrgClick (event) {
-      debugger
+      this.isLoadRoot = true
       this.$refs.orgDetailForm.open({
         operateType: 'new',
         orgKindId: '1',
@@ -170,8 +170,10 @@ export default {
       })
     },
     handleOkOrg (msg, values) {
+      if (this.isLoadRoot) {
+        this.loadRootOrgData()
+      }
       this.reloadCurrentOrgData()
-      this.$message.info(msg)
     },
     reloadCurrentOrgData () {
       const parentNode = this.selectedNode.$parent
@@ -217,6 +219,7 @@ export default {
       })
     },
     orgMenuClick (event, item) {
+      this.isLoadRoot = false
       if (event.key === '4') {
         this.$refs.userDetailForm.open({
           operateType: 'new',
