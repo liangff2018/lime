@@ -1,6 +1,5 @@
 <template>
   <a-card
-    class="lcy-ext"
     style="min-height: 580px"
   >
     <a-row :gutter="24">

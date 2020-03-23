@@ -1,6 +1,6 @@
 <template>
-  <div class="root-class-lcy">
-    <a-card>
+  <div>
+    <a-card style="min-height: 580px">
       <a-button
         type="primary"
         @click="addRootOrgClick"
@@ -10,7 +10,7 @@
         :loadData="loadOrgData"
         :treeData="orgData"
         :replaceFields="replaceFields"
-        @select="onTerrSelect"
+        @select="onTreeSelect"
         :loadedKeys="loadedKeys"
         showIcon
       >
@@ -237,7 +237,7 @@ export default {
         })
       }
     },
-    onTerrSelect (key, e) {
+    onTreeSelect (key, e) {
       this.selectedNode = e.node
     },
 
@@ -253,10 +253,7 @@ export default {
 // 引入的 antd 组件类名没有被 CSS 编译器转化，所以被覆盖的类名 .ant-card 必须依靠 Vue 提供的穿透方案来穿透组件的样式。
 // 因为上一条的关系，覆盖是全局性的。为了防止对其他 Select 组件造成影响，所以需要包裹额外的 class 限制样式的生效范围。
 // 使用 scss, less 时，可以用 /deep/ 进行样式穿透
-.root-class-lcy /deep/ .ant-card {
-  min-height: 532px;
-}
-.root-class-lcy /deep/ .ant-tree-node-content-wrapper {
-  width: 98%;
+/deep/ .ant-tree-node-content-wrapper {
+  width: calc(100% - 24px);
 }
 </style>

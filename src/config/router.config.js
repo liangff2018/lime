@@ -82,6 +82,12 @@ export const asyncRouterMap = [
             name: 'role',
             component: () => import('@/views/system/Role'),
             meta: { title: '角色管理', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/system/authorize',
+            name: 'authorize',
+            component: () => import('@/views/system/Authorize'),
+            meta: { title: '授权管理', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },
