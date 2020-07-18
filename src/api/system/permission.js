@@ -1,23 +1,23 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/resource',
-  findPage: '/resource/findPage'
+  base: '/permission',
+  findPage: '/permission/findPage'
 }
 
-export function add (resource) {
+export function add (permission) {
   return axios({
     url: api.base,
     method: 'post',
-    data: resource
+    data: permission
   })
 }
 
-export function update (resource) {
+export function update (permission) {
   return axios({
     url: api.base,
     method: 'put',
-    data: resource
+    data: permission
   })
 }
 

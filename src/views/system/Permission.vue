@@ -2,8 +2,8 @@
   <a-card>
     <a-button
       type="primary"
-      @click="addResourceClick(0)"
-    >新建菜单</a-button>
+      @click="addPermissionClick(0, 1)"
+    >新建根菜单</a-button>
     <a-table
       ref="table"
       :columns="columns"
@@ -17,15 +17,28 @@
         slot="action"
         slot-scope="row"
       >
-        <a @click="addResourceClick(row.id)">新建权限</a>
+        <a
+          :disabled="row.type === 2"
+          @click="addPermissionClick(row.id, 1)"
+        >新建菜单</a>
         <a-divider type="vertical" />
-        <a @click="editResourceClick(row.id)">编辑</a>
+        <a
+          :disabled="row.type === 2"
+          @click="addPermissionClick(row.id, 2)"
+        >新建Api</a>
         <a-divider type="vertical" />
-        <a href="javascript:;">删除</a>
+        <a @click="editPermissionClick(row.id)">编辑</a>
+        <a-divider type="vertical" />
+        <a-popconfirm
+          title="确认要删除码？"
+          @confirm="deleteResouceClick(row.id)"
+        >
+          <a>删除</a>
+        </a-popconfirm>
       </span>
     </a-table>
-    <resource-modal
-      ref="resourceModal"
+    <permission-modal
+      ref="permissionModal"
       @ok="handleOk"
     />
   </a-card>
@@ -33,8 +46,8 @@
 </template>
 
 <script>
-import ResourceModal from './modules/ResourceModal'
-import { findPage } from '@/api/system/resource'
+import PermissionModal from './modules/PermissionModal'
+import { findPage, deleteById } from '@/api/system/permission'
 const columns = [
   { title: '名称', dataIndex: 'name', sorter: true, width: '20%' },
   { title: '编码', dataIndex: 'code', sorter: true, width: '20%' },
@@ -44,7 +57,7 @@ const columns = [
 ]
 export default {
   components: {
-    ResourceModal
+    PermissionModal
   },
   mounted () {
     this.loadData()
@@ -54,7 +67,7 @@ export default {
       name: '资源权限',
       columns,
       data: [],
-      pagination: { current: 1, pageSize: 5 },
+      pagination: { current: 1, pageSize: 100 },
       queryParam: { parentId: 0 },
       loading: false
     }
@@ -82,22 +95,34 @@ export default {
     },
     loadChildrenData (parentId) {
       findPage({ parentId: parentId, pageSize: 100, pageNo: 1 }).then(res => {
-        this.data.find(item => {
-          if (item.id === parentId) {
-            item.children = res.data && res.data.length > 0 ? res.data : undefined
-          }
-        })
+        if (res.data && res.data.length > 0) {
+          const temp = res.data.map(item => { return Object.assign({ children: [] }, item) })
+          this.setDataChildren(this.data, parentId, temp)
+        }
       })
     },
-    addResourceClick (parentId) {
-      debugger
-      this.$refs.resourceModal.open({ operateType: 'new', parentId: parentId })
+    // 由于未提供当前行的方法，只能使用递归查找把数据插到哪条记录的children中
+    setDataChildren (items, parentId, temp) {
+      items.find(item => {
+        const res = this.setDataChildren(item.children, parentId, temp)
+        if (res) {
+          return
+        }
+        if (item.id === parentId) {
+          item.children = temp
+        }
+      })
     },
-    editResourceClick (id) {
-      this.$refs.resourceModal.open({ operateType: 'edit', id: id })
+    addPermissionClick (parentId, type) {
+      this.$refs.permissionModal.open({ operateType: 'new', parentId: parentId, type: type })
+    },
+    editPermissionClick (id) {
+      this.$refs.permissionModal.open({ operateType: 'edit', id: id })
+    },
+    deleteResouceClick (id) {
+      deleteById(id).then(res => { this.loadData() })
     },
     expand (isExpand, row) {
-      debugger
       if (isExpand && row.children && row.children.length === 0) {
         this.loadChildrenData(row.id)
       }

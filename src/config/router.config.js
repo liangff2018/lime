@@ -65,12 +65,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/system/Organization'),
             meta: { title: '组织管理', keepAlive: true, permission: [ 'dashboard' ] }
           },
-          {
-            path: '/system/resource',
-            name: 'resource',
-            component: () => import('@/views/system/Resource'),
-            meta: { title: '资源管理', keepAlive: true, permission: [ 'dashboard' ] }
-          },
+          // {
+          //   path: '/system/resource',
+          //   name: 'resource',
+          //   component: () => import('@/views/system/Resource'),
+          //   meta: { title: '资源管理', keepAlive: true, permission: [ 'dashboard' ] }
+          // },
           {
             path: '/system/permission',
             name: 'permission',
