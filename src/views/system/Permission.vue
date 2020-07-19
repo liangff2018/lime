@@ -1,5 +1,5 @@
 <template>
-  <a-card>
+  <a-card style="min-height: 580px">
     <a-button
       type="primary"
       @click="addPermissionClick(0, 1)"

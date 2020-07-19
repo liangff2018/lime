@@ -31,8 +31,8 @@ const columns = [
   { title: '名称', dataIndex: 'name' },
   { title: '编码', dataIndex: 'code' },
   { title: 'url', dataIndex: 'url' },
-  { title: '描述', dataIndex: 'description' },
-  { title: '请求方式', dataIndex: 'apiMethod' }
+  // { title: '描述', dataIndex: 'description' },
+  { title: '请求方式', dataIndex: 'reqMethod' }
 ]
 
 // 操作符对象
@@ -44,7 +44,7 @@ const opts = {
     url: optEnum.like,
     description: optEnum.like,
     sequence: optEnum.equalsTo,
-    apiMethod: optEnum.in,
+    reqMethod: optEnum.in,
     validState: optEnum.equalsTo
   }
 }
@@ -81,6 +81,7 @@ export default {
       this.visible = true
       this.roleId = param.roleId
       findPermissionIdsByRoleId(this.roleId).then(res => {
+        debugger
         this.selectedRowKeys = res
         this.loading = false
       })
@@ -108,14 +109,23 @@ export default {
           order: order
         }
         findPage(Object.assign(param, opts)).then(res => {
-          this.$refs.table.localDataSource.find(item => {
-            if (item.id === row.id) {
-              item.children = (res.data && res.data.length > 0) ? res.data : undefined
-            }
-          })
-          this.$refs.table.localDataSource = [...this.$refs.table.localDataSource]
+          console.log('aaa', this.$refs.table.localDataSource)
+          const temp = res.data.map(item => Object.assign({ children: [] }, item))
+          this.setDataChildren(this.$refs.table.localDataSource, row.id, temp)
         })
       }
+    },
+    // 递归遍历，给指定行加载子数据
+    setDataChildren (data, id, temp) {
+      data.find(item => {
+        const res = this.setDataChildren(item.children, id, temp)
+        if (res) {
+          return
+        }
+        if (item.id === id) {
+          item.children = temp
+        }
+      })
     }
   }
 }

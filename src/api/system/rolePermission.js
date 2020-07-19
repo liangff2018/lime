@@ -4,12 +4,14 @@ const api = {
   base: '/rolePermission',
   adds: '/rolePermission/adds',
   findPage: '/rolePermission/findPage',
-  findPermissionIdsByRoleId: 'rolePermission/findPermissionIdsByRoleId'
+  findPermissionIdsByRoleId: 'rolePermission/findPermissionIdsByRoleId',
+  findRolePermissionByParam: 'rolePermission/findRolePermissionByParam'
 }
 
 export default api
 
 export function adds (rolePermissions) {
+  debugger
   return axios({
     url: api.adds,
     method: 'post',
@@ -36,5 +38,13 @@ export function findPermissionIdsByRoleId (roleId) {
   return axios({
     url: `${api.findPermissionIdsByRoleId}/${roleId}`,
     method: 'get'
+  })
+}
+
+export function findRolePermissionByParam (param) {
+  return axios({
+    url: api.findRolePermissionByParam,
+    method: 'get',
+    params: param
   })
 }
