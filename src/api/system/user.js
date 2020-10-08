@@ -2,9 +2,9 @@ import { axios } from '@/utils/request'
 import qs from 'qs'
 
 const api = {
-  base: '/user',
-  addUserToOrg: '/user/addUserToOrg',
-  updateUserAndOrg: '/user/updateUserAndOrg'
+  base: '/sys/user',
+  addUserToOrg: '/sys/user/addUserToOrg',
+  updateUserAndOrg: '/sys/user/updateUserAndOrg'
 }
 
 export default api

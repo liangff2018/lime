@@ -30,7 +30,9 @@ export function getSmsCaptcha (parameter) {
 
 export function getInfo () {
   return axios({
-    url: '/user/info',
+    // lcy注释，这里使用自己的服务
+    // url: '/user/info',
+    url: '/sys/user/info',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -40,7 +42,9 @@ export function getInfo () {
 
 export function getCurrentUserNav (token) {
   return axios({
-    url: '/user/nav',
+    // lcy注释，这里使用自己的服务
+    // url: '/user/nav',
+    url: '/sys/user/nav',
     method: 'get'
   })
 }

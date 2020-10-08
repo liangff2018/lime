@@ -1,11 +1,11 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/organization',
-  findByParentId: '/organization/findByParentId',
-  disableOrgById: '/organization/disableOrgById',
-  enableOrgById: '/organization/enableOrgById',
-  deleteOrgById: '/organization/deleteOrgById'
+  base: '/sys/organization',
+  findByParentId: '/sys/organization/findByParentId',
+  disableOrgById: '/sys/organization/disableOrgById',
+  enableOrgById: '/sys/organization/enableOrgById',
+  deleteOrgById: '/sys/organization/deleteOrgById'
 }
 
 export default api

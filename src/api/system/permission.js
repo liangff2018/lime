@@ -1,8 +1,8 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/permission',
-  findPage: '/permission/findPage'
+  base: '/sys/permission',
+  findPage: '/sys/permission/findPage'
 }
 
 export function add (permission) {

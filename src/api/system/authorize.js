@@ -1,10 +1,10 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/authorize',
-  findPage: '/authorize/findPage',
-  adds: '/authorize/adds',
-  deleteByOrgRoleId: '/authorize/deleteByOrgRoleId'
+  base: '/sys/authorize',
+  findPage: '/sys/authorize/findPage',
+  adds: '/sys/authorize/adds',
+  deleteByOrgRoleId: '/sys/authorize/deleteByOrgRoleId'
 }
 
 export default api

@@ -1,8 +1,8 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/role',
-  findPage: '/role/findPage'
+  base: '/sys/role',
+  findPage: '/sys/role/findPage'
 }
 
 export default api

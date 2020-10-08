@@ -1,11 +1,11 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/rolePermission',
-  adds: '/rolePermission/adds',
-  findPage: '/rolePermission/findPage',
-  findPermissionIdsByRoleId: 'rolePermission/findPermissionIdsByRoleId',
-  findRolePermissionByParam: 'rolePermission/findRolePermissionByParam'
+  base: '/sys/rolePermission',
+  adds: '/sys/rolePermission/adds',
+  findPage: '/sys/rolePermission/findPage',
+  findPermissionIdsByRoleId: '/sys/rolePermission/findPermissionIdsByRoleId',
+  findRolePermissionByParam: '/sys/rolePermission/findRolePermissionByParam'
 }
 
 export default api

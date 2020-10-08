@@ -95,15 +95,23 @@ const vueConfig = {
     //     changeOrigin: true
     //   }
     // }
+    // port: 8000,
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8082',
+    //     ws: false,
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': ''
+    //     }
+    //   }
+    // }
     port: 8000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8082',
+        target: 'http://localhost:10010',
         ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        changeOrigin: true
       }
     }
   },

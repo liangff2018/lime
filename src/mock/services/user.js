@@ -428,6 +428,56 @@ const userNav = (options) => {
       'component': 'TestWork'
     },
 
+    // system
+    {
+      'name': 'system',
+      'parentId': 0,
+      'id': 1000010,
+      'meta': {
+        'icon': 'form',
+        'title': '系统管理'
+      },
+      'redirect': '/system/organization',
+      'component': 'PageView'
+    },
+    {
+      'name': 'organization',
+      'parentId': 1000010,
+      'id': 10000101,
+      'meta': {
+        'title': '组织管理'
+      },
+      'component': 'Organization'
+    },
+    {
+      'name': 'permission',
+      'parentId': 1000010,
+      'id': 10000102,
+      'meta': {
+        'title': '权限管理'
+      },
+      'component': 'Permission'
+    },
+    {
+      'name': 'role',
+      'parentId': 1000010,
+      'id': 10000103,
+      'meta': {
+        'title': '角色管理'
+      },
+      'component': 'Role'
+    },
+    {
+      'name': 'authorize',
+      'parentId': 1000010,
+      'id': 10000104,
+      'meta': {
+        'title': '授权管理'
+      },
+      'redirect': '/system/authorize',
+      'component': 'Authorize'
+    },
+
     // form
     {
       'name': 'form',

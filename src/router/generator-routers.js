@@ -18,6 +18,16 @@ const constantRouterComponents = {
   'Workplace': () => import('@/views/dashboard/Workplace'),
   'Analysis': () => import('@/views/dashboard/Analysis'),
 
+  // Lcy 添加----->开始
+
+  // system 系统管理
+  'Organization': () => import('@/views/system/Organization'),
+  'Permission': () => import('@/views/system/Permission'),
+  'Role': () => import('@/views/system/Role'),
+  'Authorize': () => import('@/views/system/Authorize'),
+
+  // Lcy 添加<-----结束
+
   // form
   'BasicForm': () => import('@/views/form/BasicForm'),
   'StepForm': () => import('@/views/form/stepForm/StepForm'),
@@ -86,7 +96,9 @@ export const generatorDynamicRouter = (token) => {
       const menuNav = []
       const childrenNav = []
       //      后端数据, 根级树数组,  根级 PID
-      listToTree(result, childrenNav, 0)
+      // listToTree(result, childrenNav, 0)
+      // lcy 注释上面的代码，修改根级PID为字符串
+      listToTree(result, childrenNav, '0')
       rootRouter.children = childrenNav
       menuNav.push(rootRouter)
       console.log('menuNav', menuNav)

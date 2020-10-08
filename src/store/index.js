@@ -4,11 +4,11 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import user from './modules/user'
 
-// default router permission control
-import permission from './modules/permission'
+// default router permission control--lcy注释下面的代码
+// import permission from './modules/permission'
 
-// dynamic router permission control (Experimental)
-// import permission from './modules/async-router'
+// dynamic router permission control (Experimental)---lcy去掉下面的注释
+import permission from './modules/async-router'
 import getters from './getters'
 
 Vue.use(Vuex)
