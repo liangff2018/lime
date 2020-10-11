@@ -23,8 +23,10 @@ const err = (error) => {
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+        message: '未经授权',
+        description: '授权验证失败.'
+        // message: 'Unauthorized',
+        // description: 'Authorization verification failed'
       })
       if (token) {
         store.dispatch('Logout').then(() => {

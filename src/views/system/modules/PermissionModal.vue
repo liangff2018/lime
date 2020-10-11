@@ -51,9 +51,26 @@
         </a-radio-group>
       </a-form-item>
       <a-form-item
+        label="组件"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+        v-show="permission.type === 1"
+      >
+        <a-input v-decorator="['component']" placeholder="指定使用的组件，如组织机构为Organization" />
+      </a-form-item>
+      <a-form-item
+        label="转发"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+        v-show="permission.type === 1"
+      >
+        <a-input v-decorator="['redirect']" placeholder="指定转发地址" />
+      </a-form-item>
+      <a-form-item
         label="请求URL"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
+        v-show="permission.type === 2"
       >
         <a-input v-decorator="['url', {rules: [{required: permission.type === 2, message: '请求URL不允许为空!'}]}]" />
       </a-form-item>
@@ -61,6 +78,7 @@
         label="请求方式"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
+        v-show="permission.type === 2"
       >
         <a-select v-decorator="['reqMethod', {rules: [{required: permission.type === 2, message: '请求方式不允许为空!'}]}]">
           <a-select-option value="get">get</a-select-option>
