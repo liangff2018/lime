@@ -1,7 +1,13 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <a href="https://pro.loacg.com/docs/getting-started" target="_blank">
+      <!-- Lcy增加ant design vue的连接地址 -->
+      <a href="https://www.antdv.com/docs/vue/introduce-cn/" target="_blank">
+        <span class="action">
+          <a-icon type="question-circle-o"></a-icon>
+        </span>
+      </a>
+      <a href="https://pro.antdv.com/" target="_blank">
         <span class="action">
           <a-icon type="question-circle-o"></a-icon>
         </span>
