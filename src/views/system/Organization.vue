@@ -144,6 +144,7 @@ export default {
   methods: {
     loadRootOrgData () {
       findOrgByParentId().then(res => {
+        console.log(res)
         this.orgData = res.map(item => Object.assign(item, slotCustom, { slots: { icon: 'orgType' + item.orgKindId } }))
       })
     },
