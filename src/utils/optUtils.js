@@ -56,6 +56,9 @@ export { optEnum }
 export function buildFindPageParam (data, opts, type) {
   const result = {}
   for (const key in data) {
+    if (data[key] === undefined || data[key] === '') {
+      continue
+    }
     switch (opts[key]) {
       case optEnum.like:
       case optEnum.notLike:
@@ -74,7 +77,6 @@ export function buildFindPageParam (data, opts, type) {
 
       case optEnum.in:
       case optEnum.notIn:
-        debugger
         if (data[key] && data[key].length > 0) {
           data[key].map(item => { result[key] = result[key] ? result[key] + ',' + item : item })
         }
