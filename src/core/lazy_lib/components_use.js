@@ -24,6 +24,8 @@ import {
   Modal,
   Table,
   Tree,
+  TreeSelect,
+  FormModel,
   Tabs,
   Icon,
   Badge,
@@ -67,6 +69,10 @@ Vue.use(Col)
 Vue.use(Modal)
 Vue.use(Table)
 Vue.use(Tree)
+// Lcy添加树选择组件
+Vue.use(TreeSelect)
+// Lcy添加FormModel组件
+Vue.use(FormModel)
 Vue.use(Tabs)
 Vue.use(Icon)
 Vue.use(Badge)
