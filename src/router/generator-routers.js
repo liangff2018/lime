@@ -25,6 +25,14 @@ const constantRouterComponents = {
   'Permission': () => import('@/views/system/Permission'),
   'Role': () => import('@/views/system/Role'),
   'Authorize': () => import('@/views/system/Authorize'),
+  'SysCode': () => import('@/views/system/SysCode'),
+  'StaticData': () => import('@/views/system/StaticData'),
+
+  // 员工管理
+  'Staff': () => import('@/views/hr/staff/Staff'),
+  'StaffForm': () => import('@/views/hr/staff/StaffForm'),
+  'Transfer': () => import('@/views/hr/staff/Transfer'),
+  'TransferForm': () => import('@/views/hr/staff/TransferForm'),
 
   // Lcy 添加<-----结束
 
