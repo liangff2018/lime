@@ -75,7 +75,6 @@ const user = {
           // resolve(response)
 
           // Lcy 注释上面的内容，使用下面的代码重写
-          debugger
           const result = response.result
           // 原功能是result.role这改为result.roles
           commit('SET_ROLES', result.roles)
