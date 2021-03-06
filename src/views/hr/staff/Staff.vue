@@ -322,6 +322,12 @@ export default {
           item = Object.assign(item, { className: 'columnHide' })
         }
       })
+    } else {
+      columns.map(item => {
+        if (item.className === 'columnHide') {
+          item = Object.assign(item, { className: '' })
+        }
+      })
     }
   },
   methods: {
