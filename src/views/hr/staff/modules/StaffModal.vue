@@ -7,7 +7,7 @@
     @cancel="cancelClick"
   >
     <staff
-      :base-query="{ staffState: '1' }"
+      :base-query="baseQuery"
       @selectedRowHandle="selectedRowHandle"
     ></staff>
   </a-modal>
@@ -23,7 +23,8 @@ export default {
   data () {
     return {
       visible: false,
-      selectedRow: undefined
+      selectedRow: undefined,
+      baseQuery: { staffState: '1' }
     }
   },
   methods: {
