@@ -37,6 +37,8 @@ const constantRouterComponents = {
   'LeaveOfficeForm': () => import('@/views/hr/staff/LeaveOfficeForm'),
   'RecruitRequire': () => import('@/views/hr/staff/RecruitRequire'),
   'RecruitRequireForm': () => import('@/views/hr/staff/RecruitRequireForm'),
+  'RecruitPlan': () => import('@/views/hr/staff/RecruitPlan'),
+  'RecruitPlanForm': () => import('@/views/hr/staff/RecruitPlanForm'),
 
   // Lcy 添加<-----结束
 

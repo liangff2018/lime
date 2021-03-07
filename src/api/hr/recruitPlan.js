@@ -1,26 +1,41 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/hr/recruitRequireDetail',
-  findPage: '/hr/recruitRequireDetail/findPage',
-  findPageNoPlan: '/hr/recruitRequireDetail/findPageNoPlan'
+  base: '/hr/recruitPlan',
+  detail: '/hr/recruitPlanDetail',
+  findPage: '/hr/recruitPlan/findPage',
+  updateBillState: '/hr/recruitPlan/updateBillState'
 }
 
 export default api
 
-export function add (recruitRequireDetail) {
+export function updateBillState (id, billState) {
   return axios({
-    url: api.base,
-    method: 'post',
-    data: recruitRequireDetail
+    url: `${api.updateBillState}/${id}/${billState}`,
+    method: 'put'
   })
 }
 
-export function update (recruitRequireDetail) {
+export function add (recruitPlan) {
+  return axios({
+    url: api.base,
+    method: 'post',
+    data: recruitPlan
+  })
+}
+
+export function update (recruitPlan) {
   return axios({
     url: api.base,
     method: 'put',
-    data: recruitRequireDetail
+    data: recruitPlan
+  })
+}
+
+export function deleteDetailById (id) {
+  return axios({
+    url: `${api.detail}/${id}`,
+    method: 'delete'
   })
 }
 
@@ -48,14 +63,6 @@ export function findById (id) {
 export function findPage (param) {
   return axios({
     url: api.findPage,
-    method: 'get',
-    params: param
-  })
-}
-
-export function findPageNoPlan (param) {
-  return axios({
-    url: api.findPageNoPlan,
     method: 'get',
     params: param
   })
