@@ -4,6 +4,7 @@ const api = {
   base: '/hr/recruitPlan',
   detail: '/hr/recruitPlanDetail',
   findPage: '/hr/recruitPlan/findPage',
+  findPageDetailFinished: '/hr/recruitPlanDetail/findPageFinished',
   updateBillState: '/hr/recruitPlan/updateBillState'
 }
 
@@ -63,6 +64,14 @@ export function findById (id) {
 export function findPage (param) {
   return axios({
     url: api.findPage,
+    method: 'get',
+    params: param
+  })
+}
+
+export function findPageDetailFinished (param) {
+  return axios({
+    url: api.findPageDetailFinished,
     method: 'get',
     params: param
   })
