@@ -97,15 +97,17 @@
             <a-divider type="vertical" />
           </span>
           <a @click="showFormClick('view', row.id)">查看</a>
-          <a-divider type="vertical" />
-          <a @click="showFormClick('edit', row.id)">编辑</a>
-          <a-divider type="vertical" />
-          <a-popconfirm
-            :title="'确认要删除吗？'"
-            @confirm="deleteClick(row.id)"
-          >
-            <a href="javascript:;">删除</a>
-          </a-popconfirm>
+          <span v-if="row.billState !== '30'">
+            <a-divider type="vertical" />
+            <a @click="showFormClick('edit', row.id)">编辑</a>
+            <a-divider type="vertical" />
+            <a-popconfirm
+              :title="'确认要删除吗？'"
+              @confirm="deleteClick(row.id)"
+            >
+              <a href="javascript:;">删除</a>
+            </a-popconfirm>
+          </span>
         </template>
       </span>
     </s-table>
