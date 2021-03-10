@@ -44,8 +44,8 @@
           </a-col>
           <a-col :span="8">
             <a-form-model-item
-              label="培训需求编号"
-              prop="requireNo"
+              label="员工姓名"
+              prop="staffName"
             >
               <a-row
                 type="flex"
@@ -53,121 +53,72 @@
               >
                 <a-col flex="auto">
                   <a-input
-                    disabled
                     v-if="operateType === 'new' || operateType === 'edit'"
-                    v-model="dataForm.requireNo"
-                    placeholder="请选择培训需求"
+                    disabled
+                    v-model="dataForm.staffName"
+                    placeholder="请选择员工"
                   />
                 </a-col>
                 <a-col flex="32px">
                   <a-button
                     icon="search"
-                    @click="planClick"
+                    @click="staffClick"
                   ></a-button>
                 </a-col>
               </a-row>
-
               <span v-else>
-                {{ dataForm.requireNo }}
+                {{ dataForm.staffName }}
               </span>
             </a-form-model-item>
           </a-col>
           <a-col :span="8">
             <a-form-model-item
-              label="计划名称"
-              prop="planName"
+              label="奖惩类型"
+              prop="rewardType"
             >
-              <a-input
+              <a-select
                 v-if="operateType === 'new' || operateType === 'edit'"
-                v-model="dataForm.planName"
-                placeholder="请输入计划名称"
-              />
+                v-model="dataForm.rewardType"
+                placeholder="请输入奖惩类型"
+              >
+                <a-select-option value="奖励">奖励</a-select-option>
+                <a-select-option value="惩罚">惩罚</a-select-option>
+              </a-select>
               <span v-else>
-                {{ dataForm.planName }}
+                {{ dataForm.rewardType }}
               </span>
             </a-form-model-item>
           </a-col>
           <a-col :span="8">
             <a-form-model-item
-              label="参加人数"
-              prop="trainPersons"
+              label="金额"
+              prop="amount"
             >
               <a-input-number
+                :min="0"
+                style="width: 100%"
                 v-if="operateType === 'new' || operateType === 'edit'"
-                v-model="dataForm.trainPersons"
-                style="width:100%"
-                placeholder="请输入参加人数"
+                v-model="dataForm.amount"
+                placeholder="请输入金额"
               />
               <span v-else>
-                {{ dataForm.trainPersons }}
+                {{ dataForm.amount }}
               </span>
             </a-form-model-item>
           </a-col>
           <a-col :span="8">
             <a-form-model-item
-              label="开始日期"
+              label="奖惩日期"
               prop="startDate"
             >
               <a-date-picker
+                style="width: 100%"
                 v-if="operateType === 'new' || operateType === 'edit'"
                 v-model="dataForm.startDate"
-                style="width: 100%"
-                placeholder="请输入开始日期"
+                placeholder="请选择奖惩日期"
               />
               <span v-else>
                 {{ dataForm.startDate | dateFormat }}
-              </span>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-model-item
-              label="结束日期"
-              prop="endDate"
-            >
-              <a-date-picker
-                v-if="operateType === 'new' || operateType === 'edit'"
-                v-model="dataForm.endDate"
-                style="width: 100%"
-                placeholder="请输入结束日期"
-              />
-              <span v-else>
-                {{ dataForm.endDate | dateFormat }}
-              </span>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item
-              label="培训内容"
-              prop="trainContent"
-              :labelCol="{sm: { span: 2 }}"
-              :wrapperCol="{sm: { span: 22 }}"
-            >
-              <a-textarea
-                v-if="operateType === 'new' || operateType === 'edit'"
-                v-model="dataForm.trainContent"
-                :rows="4"
-                placeholder="请输入培训内容"
-              />
-              <span v-else>
-                {{ dataForm.trainContent }}
-              </span>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item
-              label="备注"
-              prop="remarks"
-              :labelCol="{sm: { span: 2 }}"
-              :wrapperCol="{sm: { span: 22 }}"
-            >
-              <a-textarea
-                v-if="operateType === 'new' || operateType === 'edit'"
-                v-model="dataForm.remarks"
-                :rows="3"
-                placeholder="请输入备注"
-              />
-              <span v-else>
-                {{ dataForm.remarks }}
               </span>
             </a-form-model-item>
           </a-col>
@@ -191,14 +142,50 @@
               </span>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item
+              label="理由"
+              prop="reason"
+              :labelCol="{sm: { span: 2 }}"
+              :wrapperCol="{sm: { span: 22 }}"
+            >
+              <a-textarea
+                :rows="6"
+                v-if="operateType === 'new' || operateType === 'edit'"
+                v-model="dataForm.reason"
+                placeholder="请输入理由"
+              />
+              <span v-else>
+                {{ dataForm.reason }}
+              </span>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item
+              label="备注"
+              prop="remarks"
+              :labelCol="{sm: { span: 2 }}"
+              :wrapperCol="{sm: { span: 22 }}"
+            >
+              <a-textarea
+                :rows="4"
+                v-if="operateType === 'new' || operateType === 'edit'"
+                v-model="dataForm.remarks"
+                placeholder="请输入备注"
+              />
+              <span v-else>
+                {{ dataForm.remarks }}
+              </span>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </a-card>
 
-    <train-require-modal
-      ref="trModal"
-      @ok="okHandle"
-    ></train-require-modal>
+    <staff-model
+      ref="staffModel"
+      @ok="handleOk"
+    />
 
     <footer-tool-bar>
       <span v-show="operateType === 'new' || operateType === 'edit'">
@@ -215,21 +202,21 @@
 
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
-import { add, update, findById } from '@/api/hr/trainPlan'
+import { add, update, findById } from '@/api/hr/reward'
 import { createNextNo } from '@/api/system/sysCode'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { findItemsByName } from '@/api/system/staticData'
-import TrainRequireModal from './modules/TrainRequireModal'
+import StaffModel from './modules/StaffModal'
 
 export default {
   components: {
     FooterToolBar,
-    TrainRequireModal
+    StaffModel
   },
   data () {
     return {
-      titleName: '新增培训计划',
+      titleName: '新增奖惩管理',
       labelCol: {
         xs: { span: 24 },
         sm: { span: 6 }
@@ -243,36 +230,40 @@ export default {
         billNo: '',
         billState: '',
         billDate: undefined,
-        requireNo: '',
-        planName: '',
+        deptId: undefined,
+        deptName: '',
+        staffId: undefined,
+        staffName: '',
+        rewardType: '',
+        amount: undefined,
         startDate: undefined,
-        endDate: undefined,
-        trainContent: '',
-        trainPersons: undefined,
+        reason: '',
         remarks: '',
         enterPerson: '',
         enterTime: undefined
       },
       rules: {
-        requireNo: [
-          { required: true, message: '请输入培训需求编号', trigger: 'blur' }
+        deptName: [
+          { required: true, message: '请输入部门', trigger: 'change' }
         ],
-        planName: [
-          { required: true, message: '请输入计划名称', trigger: 'blur' }
+        staffName: [
+          { required: true, message: '请输入员工姓名', trigger: 'blur' }
+        ],
+        rewardType: [
+          { required: true, message: '请输入奖惩类型', trigger: 'blur' }
+        ],
+        amount: [
+          { required: true, message: '请输入金额', trigger: 'blur' }
         ],
         startDate: [
-          { required: true, message: '请输入开始日期', trigger: 'blur' }
+          { required: true, message: '请输入奖惩日期', trigger: 'change' }
         ],
-        endDate: [
-          { required: true, message: '请输入结束日期', trigger: 'blur' }
-        ],
-        trainContent: [
-          { required: true, message: '请输入培训内容', trigger: 'blur' }
-        ],
-        trainPersons: [
-          { required: true, message: '请输入参加人数', trigger: 'blur' }
+        reason: [
+          { required: true, message: '请输入理由', trigger: 'blur' }
         ]
       },
+      treeData: [],
+      replaceFields: { title: 'name', key: 'id', value: 'id' },
       billStateItems: []
     }
   },
@@ -287,18 +278,19 @@ export default {
     ...mapGetters(['userInfo', 'roles'])
   },
   methods: {
-    planClick () {
-      this.$refs.trModal.open()
+    staffClick () {
+      this.$refs.staffModel.open()
     },
-    okHandle (value) {
+    handleOk (value) {
       this.dataForm = Object.assign(this.dataForm, {
-        requireNo: value.billNo
+        staffId: value.id,
+        staffName: value.staffName
       })
     },
     open (param) {
       this.operateType = param.operateType
       if (this.operateType === 'new') {
-        this.titleName = '新建培训计划'
+        this.titleName = '新建奖惩管理'
         this.dataForm = Object.assign(this.dataForm, {
           billState: '10',
           billNo: '',
@@ -306,11 +298,11 @@ export default {
           enterPerson: this.userInfo.name,
           enterTime: moment(new Date())
         })
-        createNextNo('PXJH' + moment(new Date()).format('YYYYMM') + '-', '0000').then(res => {
+        createNextNo('JCGL' + moment(new Date()).format('YYYYMM') + '-', '0000').then(res => {
           this.dataForm.billNo = res
         })
       } else if (this.operateType === 'edit' || this.operateType === 'view') {
-        this.titleName = (this.operateType === 'edit' ? '编辑' : '查看') + '培训计划'
+        this.titleName = (this.operateType === 'edit' ? '编辑' : '查看') + '奖惩管理'
         findById(param.id).then(res => {
           this.dataForm = res
         })
