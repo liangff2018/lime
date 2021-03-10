@@ -1,26 +1,25 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  base: '/hr/trainRequire',
-  findPage: '/hr/trainRequire/findPage',
-  findPageFinished: '/hr/trainRequire/findPageFinished'
+  base: '/hr/trainPlan',
+  findPage: '/hr/trainPlan/findPage'
 }
 
 export default api
 
-export function add (trainRequire) {
+export function add (trainPlan) {
   return axios({
     url: api.base,
     method: 'post',
-    data: trainRequire
+    data: trainPlan
   })
 }
 
-export function update (trainRequire) {
+export function update (trainPlan) {
   return axios({
     url: api.base,
     method: 'put',
-    data: trainRequire
+    data: trainPlan
   })
 }
 
@@ -48,14 +47,6 @@ export function findById (id) {
 export function findPage (param) {
   return axios({
     url: api.findPage,
-    method: 'get',
-    params: param
-  })
-}
-
-export function findPageFinished (param) {
-  return axios({
-    url: api.findPageFinished,
     method: 'get',
     params: param
   })
