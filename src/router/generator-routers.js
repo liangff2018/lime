@@ -41,6 +41,8 @@ const constantRouterComponents = {
   'RecruitPlanForm': () => import('@/views/hr/staff/RecruitPlanForm'),
   'Interview': () => import('@/views/hr/staff/Interview'),
   'InterviewForm': () => import('@/views/hr/staff/InterviewForm'),
+  'TrainRequire': () => import('@/views/hr/staff/TrainRequire'),
+  'TrainRequireForm': () => import('@/views/hr/staff/TrainRequireForm'),
 
   // Lcy 添加<-----结束
 
